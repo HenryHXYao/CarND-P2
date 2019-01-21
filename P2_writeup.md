@@ -82,7 +82,13 @@ After M and Minv are calculated, I apply a perspective transform to all test bin
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+The lane-line pixels are detected using the [sliding window search method](https://classroom.udacity.com/nanodegrees/nd013/parts/edf28735-efc1-4b99-8fbb-ba9c432239c8/modules/5d1efbaa-27d0-4ad5-a67a-48729ccebd9c/lessons/626f183c-593e-41d7-a828-eda3c6122573/concepts/4dd9f2c2-1722-412f-9a02-eec3de0c2207) or [search around a polynomial curve method](https://classroom.udacity.com/nanodegrees/nd013/parts/edf28735-efc1-4b99-8fbb-ba9c432239c8/modules/5d1efbaa-27d0-4ad5-a67a-48729ccebd9c/lessons/626f183c-593e-41d7-a828-eda3c6122573/concepts/474a329a-78d0-4a33-833a-34d02a35fc13) provided by the course.
+* When the previous frame does not pass the sanity check which means the detection on the previous frame is wrong, the sliding window search method is used. First, take a histogram of the bottom of the image. Then find the peak of the left and right halves of the histogram as the start position of the sliding window. The pixels are searched inside the current window and the window's x position is updated using the mean value of the current detected pixels when the window moves towards the upper part of the image. 
+* When the previous frame passes the sanity check which means the detection on the previous frame makes sense, the pixels are searched in a margin around the previous polynomial curve.
+
+To better visualize the process in the final output image, after the line pixels are detected, the pixels belonging to the left lane are marked in red and the right ones are marked in blue. Furthermore, if the sliding window search method is activated, all the windows are plotted on the images in green. The pixels and windows are warped back to the original image to show which pixels on the road are used to fit the polynomial and which detection status the current frame is (green window on the image - previous frame wrong and the current frame is using slidng window search; no green window - previous frame is correct and the current frame is using search around a polynomial curve)
+
+After the above process, the detected pixels are fitted using `np.polyfit`. Then the area between the fitted lane lines are plotted in green. The results of this step is shown as following:
 
 ![alt text][image5]
 
