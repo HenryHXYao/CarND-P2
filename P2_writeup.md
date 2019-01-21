@@ -164,7 +164,7 @@ Unfortunately, my current pipeline failed in the challenge_video and the harder_
 
 * **Shortcomings:**
 
-(1) In the [challenge_video](./output_videos/challenge_video.mp4), two black color lines exist on the road and the algorithms detect them as the lane lines uncorrectly.
+(1) In the [challenge_video](./output_videos/challenge_video.mp4), two black lines exist on the road and the algorithms detect them as the lane lines uncorrectly.
 
 (2) In the [harder_challenge_video](./output_videos/harder_challenge_video.mp4), the light condition changes rapidly; the curvature of the lane is large; and the bushes close to the road disturb the pipeline severely
 
@@ -174,4 +174,4 @@ Unfortunately, my current pipeline failed in the challenge_video and the harder_
 
 (2) The sliding window search used in the current pipeline need to be modified to adapt to larger curvature of the lane. 
 
-(3) The current sanity check only involves checking that the left and right lanes are roughly parallel. More sanity checks, like the difference in the line fit between frames should be considered.
+(3) The current sanity check only involves checking that the left and right lanes are roughly parallel. More sanity checks, like the difference in the line fit between frames should be considered to distinguish correct detection better.
