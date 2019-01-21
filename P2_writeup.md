@@ -88,17 +88,22 @@ The lane-line pixels are detected using the [sliding window search method](https
 
 To better visualize the process in the final output image, after the line pixels are detected, the pixels belonging to the left lane are marked in red and the right ones are marked in blue. Furthermore, if the sliding window search method is activated, all the windows are plotted on the images in green. The pixels and windows are warped back to the original image to show which pixels on the road are used to fit the polynomial and which detection status the current frame is (green window on the image - previous frame wrong and the current frame is using slidng window search; no green window - previous frame is correct and the current frame is using search around a polynomial curve)
 
-After the above process, the detected pixels are fitted using `np.polyfit`. Then the area between the fitted lane lines are plotted in green. The results of this step is shown as following:
+After the above process, the detected pixels are fitted using `np.polyfit`. Then the area between the fitted lane lines are plotted in green. The results of this step are shown as the following:
 
 ![alt text][image5]
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+First, using the coefficients below to convert the 
+    # Define conversions in x and y from pixels space to meters
+    ym_per_pix = 30/720 # meters per pixel in y dimension
+    xm_per_pix = 3.7/700 # meters per pixel in x dimension
 
-I did this in lines # through # in my code in `my_other_file.py`
+You can assume the camera is mounted at the center of the car, such that the lane center is the midpoint at the bottom of the image between the two lines you've detected. The offset of the lane center from the center of the image (converted from pixels to meters) is your distance from the center of the lane.
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+The annotated image obtained from the previous step is warped back to original image space using `cv2.warpPerspective` and Minv. Then this image is added to the undistorted image using `cv2.addWeighted`. Finally, the numerical estimation of lane curvature and vehicle position is put on the image using `cv2.putText`
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+The final results are good and here are the output images:
 
 ![alt text][image6]
 
@@ -107,6 +112,9 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 ### Pipeline (video)
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+Line() class
+sanity check
+averaging
 
 Here's a [link to my video result](./output_videos/project_video.mp4)
 
