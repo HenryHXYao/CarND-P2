@@ -13,7 +13,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./output_images/undistorted_chessboard.png
+[image1]: ./output_images/undistorted_chessboard.png "undistorted_chessboard"
 [image2]: ./output_images/undistorted_images.png "Road Transformed"
 [image3]: ./output_images/combo_threshold_images.png "Binary Example"
 [image4]: ./output_images/perspective_transformation_images.png "Warp Example"
@@ -27,12 +27,6 @@ The goals / steps of this project are the following:
 
 ---
 
-### Writeup / README
-
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
-
-You're reading it!
-
 ### Camera Calibration
 
 #### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
@@ -45,7 +39,8 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 ![alt text][image1]
 
-### Pipeline (single images)
+### Pipeline 
+To show the performance of my pipeline in different conditions, I provide results of all tested_images for each step
 
 #### 1. Provide an example of a distortion-corrected image.
 
@@ -54,7 +49,20 @@ To demonstrate this step, I will describe how I apply the distortion correction 
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+As the lanes are nearly vertical, the sobelx filter performs better than the sobely filter. So I only integrate the sobelx in the combined thresholding function.
+
+The combined magnitude and direction thresholding function has similar performance to the sobelx thresholding function, so I choose not to use mag and dir in the combination thresholding function
+
+The HSL S channel thresholding function can work well on most test images except when there is large area of shadow on the image. However, the shadow can be properly filtered by the HSL H thresholding function. Therefore, I choose to use bitwise.AND() of the HSL_S and HSL_H to obtain the results. 
+
+As discussed above, the final combination includes
+* Sobelx 
+* HSL H 
+* HSL S
+
+The HSL function can detect color better while the Sobelx function is good at finding edge, so my final choice is :
+
+thresholded_binary = Sobelx OR (hsl_h AND hsl_s)
 
 ![alt text][image3]
 
@@ -118,4 +126,18 @@ Here's a [link to my video result](./output_videos/project_video.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+Unfortunately, my current pipeline failed in the challenge_video and the harder_challenge_video. 
+
+* **Shortcomings:**
+
+(1) In the challenge_video, two black color lines exist on the road and the algorithms detect them as the lane lines uncorrectly.
+
+(2) In the harder_challenge_video, the light condition changes rapidly; the curvature of the lane is large; and the bushes close to the road disturb the pipeline severely
+
+* **Improvements:**
+
+(1) More work should be put into tuning the color and gradient thresholding function to reduce disturbances as much as possible. 
+
+(2) The sliding window search used in the current pipeline need to be modified to adapt to larger curvature of the lane. 
+
+(3) The current sanity check only involves checking that the left and right lanes are roughly parallel. More sanity checks, like the difference in the line fit between frames should be considered.
