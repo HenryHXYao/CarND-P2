@@ -136,10 +136,10 @@ If the diff_lane_distance < 1, then the sanity check is passed.
 **The line() class and averaging**
 
 In the Line() class, I define the following variables to be recorded:
-* self.detected: whether the detection on the previous frame passed the sanity check. This variable was used to choose the lane pixel finding algorithm (as said before, if self.detected = True, the search around a polynomial curve method is used; otherwise the sliding window search method is used)
+* self.detected: whether the detection on the previous frame passed the sanity check. This variable was used to choose the lane pixel finding algorithm (as said before, if self.detected = True, the search around a polynomial curve method is used; otherwise, the sliding window search method is used)
 * self.current_leftfit and self.current_rightfit: Lists recording the fit history. Each time a frame passed the sanity check, the fit coefficients, left_fit and right_fit are appended at the end of current_leftfit and current_rightfit, respectively.
-* self.best_leftfit and self.best_rightfit: the averaged left_fit and right_fit. The last 8 records in self.current_leftfit and self.current_rightfit are averaged to get the best fit. Then the best fit is plotted on the 
-* self.radius_of_curvature and self.line_base_pos: Lists recording the history of the radius of curvature and the position
+* self.best_leftfit and self.best_rightfit: the averaged left_fit and right_fit. The last 8 records in self.current_leftfit and self.current_rightfit are averaged to get the best fit. Then the best fit is plotted on the output image.
+* self.radius_of_curvature and self.line_base_pos: Lists recording the history of the radius of curvature and the position. Same averaging technique as the left and right fit is used to get more smooth  estimation of the radius and position.
 
 Here's a [link to my video result](./output_videos/project_video.mp4)
 
