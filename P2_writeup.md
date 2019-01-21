@@ -52,13 +52,14 @@ Six types of thresholding functions are tested:
 * Sobel magnitude and direction function: First obtain the sobelx and sobely gradient. Then calculate the magnitude and direction of the vector formed by (sobelx, sobely). Finally apply an upper and lower thresholding to obtain the binary image.
 * HSL H channel and S channel function: First convert the image into HSL color space using `cv2.cvtColor(img,cv2.COLOR_RGB2HLS)`. Then for the H channel or S channel, apply thresholding to obtain the corresponding binary image.
 
-The conclusions I got from tests are: 
-* As the lanes are nearly vertical, the sobelx transform performs better than the sobely. 
-* The combined magnitude and direction thresholding function has similar performance to the sobelx thresholding function
+The observations I get from the tests are: 
+* As the lanes are nearly vertical, the Sobelx transform performs better than the Sobely transform. The Sobely transform detects many fake horizontal lane lines and will disturb the following steps. 
+* The combined magnitude and direction thresholding function has similar performance to the Sobelx thresholding function. Both of them can obtain good results after careful parameter tuning.
 * The HSL S channel thresholding function can work well on most test images except when there is large area of shadow on the image. However, the shadow can be properly filtered by the HSL H thresholding function. 
-* The HSL function can detect color better while the Sobelx function is good at finding edge, they can be combined together
+* The HSL functions can detect color better while the Sobel gradient functions are good at finding edges. They can be combined to get more complete lane detection results.
 
-Therefore, , so my final choice is : thresholded_binary = Sobelx OR (hsl_h AND hsl_s). The thresholded binary image I get is like the following. The combination function can clearly mark the left and right lanes on the image.
+Therefore, my final choice is to integrate Sobelx function and HSL H and S function into the final combination function: thresholded_binary = Sobelx OR (HSL_h AND HSL_s). 
+The thresholded binary image I get is like the following. The combination function can clearly mark the left and right lanes on the imageS.
 
 ![alt text][image3]
 
