@@ -76,7 +76,7 @@ The `cv2.getPerspectiveTransform()` function takes the source (`src`) and destin
 
 Then the inverse matrix of M, Minv is calculated using `numpy.linalg.inv`. Minv will be used in Step 6 to warp the detected lane boundaries back onto the original image.
 
-After M and Minv are calculated, I apply a perspective transform to all test binary images obtained from the previous step using `cv2.warpPerspective`. My perspective transform is working as expected because the straight lines in the second and third images are transformed into vertical lines in the bird-eye view. 
+After M and Minv are calculated, I apply a perspective transform to all test binary images obtained from the previous step using `cv2.warpPerspective`. My perspective transform is working as expected because the straight lines in the second and third images are transformed into vertical lines in the bird-eye view and other curve lines are roughly parallel to each other after the transformation. 
 
 ![alt text][image4]
 
