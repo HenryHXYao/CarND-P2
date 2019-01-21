@@ -59,7 +59,7 @@ The observations I get from the tests are:
 * The HSL functions can detect color better while the Sobel gradient functions are good at finding edges. They can be combined to get more complete lane detection results.
 
 Based on the above observations, my final choice is to integrate Sobelx function and HSL H and S function into the final combination function: thresholded_binary = Sobelx OR (HSL_h AND HSL_s). 
-The thresholded binary image I get is like the following. The combination function can clearly mark the left and right lanes on the images.
+The thresholded binary image I get is like the following. The combination function can clearly mark the left and right lanes on the images and the results are unaffected by shadows and light changes.
 
 ![alt text][image3]
 
@@ -153,9 +153,9 @@ Unfortunately, my current pipeline failed in the challenge_video and the harder_
 
 * **Shortcomings:**
 
-(1) In the challenge_video, two black color lines exist on the road and the algorithms detect them as the lane lines uncorrectly.
+(1) In the [challenge_video](./output_videos/challenge_video.mp4), two black color lines exist on the road and the algorithms detect them as the lane lines uncorrectly.
 
-(2) In the harder_challenge_video, the light condition changes rapidly; the curvature of the lane is large; and the bushes close to the road disturb the pipeline severely
+(2) In the [harder_challenge_video](./output_videos/harder_challenge_video.mp4), the light condition changes rapidly; the curvature of the lane is large; and the bushes close to the road disturb the pipeline severely
 
 * **Improvements:**
 
