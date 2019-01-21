@@ -88,17 +88,22 @@ The lane-line pixels are detected using the [sliding window search method](https
 
 To better visualize the process in the final output image, after the line pixels are detected, the pixels belonging to the left lane are marked in red and the right ones are marked in blue. Furthermore, if the sliding window search method is activated, all the windows are plotted on the images in green. The pixels and windows are warped back to the original image to show which pixels on the road are used to fit the polynomial and which detection status the current frame is (green window on the image - previous frame wrong and the current frame is using slidng window search; no green window - previous frame is correct and the current frame is using search around a polynomial curve)
 
-After the above process, the detected pixels are fitted using `np.polyfit`. Then the area between the fitted lane lines are plotted in green. The results of this step are shown as the following:
+After the above process, the detected pixels are fitted into a 2nd order polynomial using `np.polyfit`. Then the area between the fitted lane lines are plotted in green. The results of this step are shown as the following:
 
 ![alt text][image5]
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
-First, using the coefficients below to convert the 
-    # Define conversions in x and y from pixels space to meters
-    ym_per_pix = 30/720 # meters per pixel in y dimension
-    xm_per_pix = 3.7/700 # meters per pixel in x dimension
+First, using the coefficients below to convert the polynomial fit for each lane, left_fit and right_fit from pixels space to meters， left_fit_real, right_fit_real
 
-You can assume the camera is mounted at the center of the car, such that the lane center is the midpoint at the bottom of the image between the two lines you've detected. The offset of the lane center from the center of the image (converted from pixels to meters) is your distance from the center of the lane.
+`ym_per_pix = 30/720  xm_per_pix = 3.7/700 `
+  
+Then the curvature and position are calculated in the following way:
+
+``` python
+left_curve = ((1 + (2*left_fit_real[0]*y_eval + left_fit_real[1])**2)**1.5) / np.absolute(2*left_fit_real[0])  
+right_curve = ((1 + (2*right_fit_real[0]*y_eval + right_fit_real[1])**2)**1.5) / np.absolute(2*right_fit_real[0]) 
+position = (left_fit_real[0]*(y_eval**2)+ left_fit_real[1]*(y_eval)+ left_fit_real[2] + right_fit_real[0]*(y_eval**2) + right_fit_real[1]*(y_eval)+ right_fit_real[2])/2 - image.shape[1]/2*xm_per_pix
+ ```
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 The annotated image obtained from the previous step is warped back to original image space using `cv2.warpPerspective` and Minv. Then this image is added to the undistorted image using `cv2.addWeighted`. Finally, the numerical estimation of lane curvature and vehicle position is put on the image using `cv2.putText`
