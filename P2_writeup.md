@@ -20,7 +20,7 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [image1]: ./output_images/undistorted_chessboard.png
-[image2]: ./test_images/test1.jpg "Road Transformed"
+[image2]: ./output_images/undistorted_images.png "Road Transformed"
 [image3]: ./output_images/combo_threshold_images.png "Binary Example"
 [image4]: ./output_images/perspective_transformation_images.png "Warp Example"
 [image5]: ./output_images/lane_finding_images.png "Fit Visual"
