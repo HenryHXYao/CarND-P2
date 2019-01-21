@@ -65,7 +65,7 @@ The thresholded binary image I get is like the following. The combination functi
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The `cv2.getPerspectiveTransform()` function takes the source (`src`) and destination (`dst`) points as inputs an image (`img`).  I chose to select the source and destination points in the following manner:
+The `cv2.getPerspectiveTransform()` function takes the source (`src`) and destination (`dst`) points as inputs and output the transformation matrix M.  I chose to select the source and destination points in the following manner:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
@@ -74,7 +74,9 @@ The `cv2.getPerspectiveTransform()` function takes the source (`src`) and destin
 | 683, 450     | 960, 0      |
 | 1108,719      | 960, 719        |
 
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
+Then the inverse matrix of M, Minv is calculated using `numpy.linalg.inv`. Minv will be used in Step 6 to warp the detected lane boundaries back onto the original image.
+
+After M and Minv are calculated, I apply a perspective transform to all test binary images obtained from the previous step using `cv2.warpPerspective`. My perspective transform is working as expected because the straight lines in the second and third images are transformed into vertical lines in the bird-eye view. 
 
 ![alt text][image4]
 
