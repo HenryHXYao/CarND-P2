@@ -43,10 +43,15 @@ To show the performance of my pipeline in different conditions, I provide result
 
 #### 1. Provide an example of a distortion-corrected image.
 
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
+Using the camera calibration and distortion coefficients obtained from the previous step, I apply the undistortion operation to all test images, the results are: 
 ![alt text][image2]
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
+Six types of thresholding functions are tested:
+* Sobelx and Sobely function: first convert the image into grayscale using `cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)` function. Then calculate the image gradient along the x axis or the y axis using `cv2.Sobel` function. After this, take the absolute value of the gradient and scale the gradient to 8 bit(0-255). Finally apply a upper and lower thresholding to obtain the binary image.
+* Sobel magnitude and direction function: First obtain the sobelx and sobely gradient. Then calculate the magnitude and direction of the vector formed by (sobelx, sobely). Finally apply an upper and lower thresholding to obtain the binary image.
+* HSL H channel and S channel function: First convert the image into HSL color space using `cv2.cvtColor(img,cv2.COLOR_RGB2HLS)`. Then for the H channel or S channel, apply thresholding to obtain the corresponding binary image.
+
 The conclusions I got from tests are: 
 * As the lanes are nearly vertical, the sobelx transform performs better than the sobely. 
 * The combined magnitude and direction thresholding function has similar performance to the sobelx thresholding function
