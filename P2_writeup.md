@@ -39,7 +39,9 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 ![alt text][image1]
 
-### Pipeline 
+---
+
+### Pipeline (tested images)
 To show the performance of my pipeline in different conditions, I provide results of all tested_images for each step
 
 #### 1. Provide an example of a distortion-corrected image.
