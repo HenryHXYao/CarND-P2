@@ -48,21 +48,13 @@ To demonstrate this step, I will describe how I apply the distortion correction 
 ![alt text][image2]
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
+The conclusions I got from tests are: 
+* As the lanes are nearly vertical, the sobelx transform performs better than the sobely. 
+* The combined magnitude and direction thresholding function has similar performance to the sobelx thresholding function
+* The HSL S channel thresholding function can work well on most test images except when there is large area of shadow on the image. However, the shadow can be properly filtered by the HSL H thresholding function. 
+* The HSL function can detect color better while the Sobelx function is good at finding edge, they can be combined together
 
-As the lanes are nearly vertical, the sobelx filter performs better than the sobely filter. So I only integrate the sobelx in the combined thresholding function.
-
-The combined magnitude and direction thresholding function has similar performance to the sobelx thresholding function, so I choose not to use mag and dir in the combination thresholding function
-
-The HSL S channel thresholding function can work well on most test images except when there is large area of shadow on the image. However, the shadow can be properly filtered by the HSL H thresholding function. Therefore, I choose to use bitwise.AND() of the HSL_S and HSL_H to obtain the results. 
-
-As discussed above, the final combination includes
-* Sobelx 
-* HSL H 
-* HSL S
-
-The HSL function can detect color better while the Sobelx function is good at finding edge, so my final choice is :
-
-thresholded_binary = Sobelx OR (hsl_h AND hsl_s)
+Therefore, , so my final choice is : thresholded_binary = Sobelx OR (hsl_h AND hsl_s). The thresholded binary image I get is like the following. The combination function can clearly mark the left and right lanes on the image.
 
 ![alt text][image3]
 
