@@ -93,7 +93,7 @@ After the above process, the detected pixels are fitted into a 2nd order polynom
 ![alt text][image5]
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
-First, using the coefficients below to convert the polynomial fit for each lane, left_fit and right_fit from pixels space to meters， left_fit_real, right_fit_real
+First, use the coefficients below to convert the polynomial fit for each lane, left_fit and right_fit from pixels space to meters, left_fit_real and right_fit_real.
 
 `ym_per_pix = 30/720  xm_per_pix = 3.7/700 `
   
@@ -117,9 +117,29 @@ The final results are good and here are the output images:
 ### Pipeline (video)
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
-Line() class
-sanity check
-averaging
+The above pipeline can work well on test images. However, to make it work well on videos, three more things need to be done:
+* define the Line() class to keep track of useful variables.
+* do sanity check on each frame to determine whether the detection on the current frame makes sense or not.
+* do averaging over last n frames to smoothen the detection results.
+
+**The sanity check**
+
+First, I calculated the distances between the two fitted lanes at the top and bottom of the image. Then I use the absolute value of the difference between these two distances as an indication of whether the two lanes are parallel to each other. 
+
+```python
+top_distance = left_fit_real[2]-right_fit_real[2]
+bottom_distance = (left_fit_real[0]*(y_eval**2)+ left_fit_real[1]*(y_eval)+ left_fit_real[2]) - (right_fit_real[0]*(y_eval**2)+ right_fit_real[1]*(y_eval)+ right_fit_real[2])
+diff_lane_distance = np.absolute(bottom_distance - top_distance)
+```
+If the diff_lane_distance < 1, then the sanity check is passed.
+
+**The line() class and averaging**
+
+In the Line() class, I define the following variables to be recorded:
+* self.detected: whether the detection on the previous frame passed the sanity check. This variable was used to choose the lane pixel finding algorithm (as said before, if self.detected = True, the search around a polynomial curve method is used; otherwise the sliding window search method is used)
+* self.current_leftfit and self.current_rightfit: Lists recording the fit history. Each time a frame passed the sanity check, the fit coefficients, left_fit and right_fit are appended at the end of current_leftfit and current_rightfit, respectively.
+* self.best_leftfit and self.best_rightfit: the averaged left_fit and right_fit. The last 8 records in self.current_leftfit and self.current_rightfit are averaged to get the best fit. Then the best fit is plotted on the 
+* self.radius_of_curvature and self.line_base_pos: Lists recording the history of the radius of curvature and the position
 
 Here's a [link to my video result](./output_videos/project_video.mp4)
 
