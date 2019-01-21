@@ -58,7 +58,7 @@ The observations I get from the tests are:
 * The HSL S channel thresholding function can work well on most test images except when there is large area of shadow on the image. However, the shadow can be properly filtered by the HSL H thresholding function. 
 * The HSL functions can detect color better while the Sobel gradient functions are good at finding edges. They can be combined to get more complete lane detection results.
 
-Based on the above observations, my final choice is to integrate Sobelx function and HSL H and S function into the final combination function: thresholded_binary = Sobelx OR (HSL_h AND HSL_s). 
+Based on the above observations, my final choice is to integrate Sobelx function and HSL H and S function into the final combination function: **thresholded_binary = Sobelx OR (HSL_h AND HSL_s)**. 
 The thresholded binary image I get is like the following. The combination function can clearly mark the left and right lanes on the images and the results are unaffected by shadows and light changes.
 
 ![alt text][image3]
